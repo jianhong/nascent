@@ -521,7 +521,7 @@ process bbduk {
         """
     }else if (!params.singleEnd) {
         """
-        echo ${name}      
+        echo ${name}    
 
         bbduk.sh -Xmx${bbduk_mem}g \
                   t=${task.cpus} \
@@ -541,7 +541,8 @@ process bbduk {
     } else {
         """
         echo ${name}
-        echo ${bbduk_mem}
+        echo ${bbduk_mem} 
+        zcat ${reads} > ${name}.fastq
         
         bbduk.sh -Xmx${bbduk_mem}g \
                   t=${task.cpus} \
