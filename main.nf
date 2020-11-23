@@ -292,7 +292,6 @@ ${summary.collect { k,v -> "            <dt>$k</dt><dd><samp>${v ?: '<span style
  * Parse software version numbers
  */
 process get_software_versions {
-    validExitStatus 0,1,127
     publishDir "${params.outdir}/software_versions/", mode: 'copy', pattern: '*.txt'
 
     output:
@@ -453,7 +452,6 @@ process gzip_fastq {
  */
 
 process bbduk {
-    validExitStatus 0,1
     tag "$name"
     publishDir "${params.outdir}/qc/trimstats", mode: 'copy', pattern: "*.txt"
 
@@ -564,7 +562,6 @@ process bbduk {
  */
 
 process fastqc_trimmed {
-    validExitStatus 0,1
     tag "$prefix"
     publishDir "${params.outdir}/qc/fastqc/", mode: 'copy',
         saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
@@ -619,7 +616,6 @@ process hisat2 {
     // termination, so we have to ignore errors for now, and the next 
     // process will blow up from missing a SAM file instead.
     tag "$name"
-    validExitStatus 0,143
 
     input:
     val(indices) from hisat2_indices.first()
@@ -747,7 +743,6 @@ process preseq {
 
 process rseqc {
     tag "$name"
-    validExitStatus 0,143
     publishDir "${params.outdir}/qc/rseqc" , mode: 'copy',
         saveAs: {filename ->
                  if (filename.indexOf("infer_experiment.txt") > 0)              "infer_experiment/$filename"
@@ -819,7 +814,6 @@ process pileup {
  */
 
 process bedgraphs {
-    validExitStatus 0,143
     tag "$name"
     publishDir "${params.outdir}/mapped/bedgraphs", mode: 'copy', pattern: "*{neg,pos}.bedGraph"
     publishDir "${params.outdir}/mapped/bedgraphs", mode: 'copy', pattern: "${name}.bedGraph"
@@ -923,7 +917,6 @@ chrom_sizes_ch.into{chrom_sizes_for_bed; chrom_sizes_for_bigwig; chrom_sizes_for
  */
 
 process dreg_prep {
-    validExitStatus 0,143
     errorStrategy 'ignore'
     tag "$name"
     publishDir "${params.outdir}/mapped/dreg_input", mode: 'copy', pattern: "*.bw"
@@ -967,7 +960,6 @@ process dreg_prep {
  */
 
 process normalized_bigwigs {
-    validExitStatus 0
     tag "$name"
     publishDir "${params.outdir}/mapped/rcc_bigwig", mode: 'copy'
 
@@ -1018,7 +1010,6 @@ process igvtools {
  * STEP 9 - MultiQC
  */
 process multiqc {
-    validExitStatus 0,1,143
     errorStrategy 'ignore'
     publishDir "${params.outdir}/multiqc/", mode: 'copy', pattern: "multiqc_report.html"
     publishDir "${params.outdir}/multiqc/", mode: 'copy', pattern: "*_data"
