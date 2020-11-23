@@ -124,6 +124,9 @@ if ( params.fasta ){
 }
 else {
     params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
+    Channel.fromPath(params.fasta)
+           .ifEmpty { exit 1, "Fasta file not found: ${params.fasta}" }
+           .into { genome_fasta; ch_fasta_for_hisat_index}
 }
 
 if( params.chrom_sizes ){
